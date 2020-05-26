@@ -304,7 +304,25 @@ DataView.defaultOption = {
     buttonTextColor: '#fff'
 };
 
-DataView.prototype.onclick = function (ecModel, api) {
+var proto = DataView.prototype;
+
+proto.render = function (featureModel, ecModel, api, payload) {
+    var action = payload && payload.type;
+    if (!action) {
+        return;
+    }
+    if (action === 'showDataView') {
+        this._showView(ecModel, api);
+    }
+    else if (action === 'hideDataView') {
+        this._hideView(ecModel, api);
+    }
+};
+
+/**
+ * @inner
+ */
+proto._showView = function (ecModel, api) {
     var container = api.getDom();
     var model = this.model;
     if (this._dom) {
@@ -411,11 +429,25 @@ DataView.prototype.onclick = function (ecModel, api) {
     this._dom = root;
 };
 
-DataView.prototype.remove = function (ecModel, api) {
-    this._dom && api.getDom().removeChild(this._dom);
+/**
+ * @inner
+ */
+proto._hideView = function (ecModel, api) {
+    if (this._dom) {
+        api.getDom().removeChild(this._dom);
+        this._dom = null;
+    }
 };
 
-DataView.prototype.dispose = function (ecModel, api) {
+proto.onclick = function (ecModel, api) {
+    this._showView(ecModel, api);
+};
+
+proto.remove = function (ecModel, api) {
+    this._hideView(ecModel, api);
+};
+
+proto.dispose = function (ecModel, api) {
     this.remove(ecModel, api);
 };
 
@@ -470,6 +502,34 @@ echarts.registerAction({
     ecModel.mergeOption(zrUtil.defaults({
         series: newSeriesOptList
     }, payload.newOption));
+});
+
+/**
+ * @action
+ * @property {string} type
+ */
+echarts.registerAction({
+    type: 'showDataView',
+    event: 'dataviewvisiblitychanged',
+    update: 'updateView'
+}, function () {
+    return {
+        visible: true
+    };
+});
+
+/**
+ * @action
+ * @property {string} type
+ */
+echarts.registerAction({
+    type: 'hideDataView',
+    event: 'dataviewvisiblitychanged',
+    update: 'updateView'
+}, function () {
+    return {
+        visible: false
+    };
 });
 
 export default DataView;

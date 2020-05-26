@@ -381,9 +381,14 @@ proto._showView = function (ecModel, api) {
 
     var self = this;
 
-    function close() {
+    function close(isRefresh) {
         container.removeChild(root);
         self._dom = null;
+
+        api.dispatchAction({
+            type: 'hideDataView',
+            source: isRefresh === true ? 'refresh' : 'close'
+        });
     }
     eventTool.addEventListener(closeButton, 'click', close);
 
@@ -398,7 +403,7 @@ proto._showView = function (ecModel, api) {
             }
         }
         catch (e) {
-            close();
+            close(true);
             throw new Error('Data view format error ' + e);
         }
         if (newOption) {
@@ -408,7 +413,7 @@ proto._showView = function (ecModel, api) {
             });
         }
 
-        close();
+        close(true);
     });
 
     closeButton.innerHTML = lang[1];
@@ -441,6 +446,11 @@ proto._hideView = function (ecModel, api) {
 
 proto.onclick = function (ecModel, api) {
     this._showView(ecModel, api);
+
+    api.dispatchAction({
+        type: 'showDataView',
+        source: 'click'
+    });
 };
 
 proto.remove = function (ecModel, api) {
@@ -512,9 +522,10 @@ echarts.registerAction({
     type: 'showDataView',
     event: 'dataviewvisiblitychanged',
     update: 'updateView'
-}, function () {
+}, function (payload) {
     return {
-        visible: true
+        visible: true,
+        source: payload.source || 'action'
     };
 });
 
@@ -526,9 +537,10 @@ echarts.registerAction({
     type: 'hideDataView',
     event: 'dataviewvisiblitychanged',
     update: 'updateView'
-}, function () {
+}, function (payload) {
     return {
-        visible: false
+        visible: false,
+        source: payload.source || 'action'
     };
 });
 

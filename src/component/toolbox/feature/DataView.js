@@ -22,6 +22,7 @@ import * as zrUtil from 'zrender/src/core/util';
 import * as eventTool from 'zrender/src/core/event';
 import lang from '../../../lang';
 import * as featureManager from '../featureManager';
+import * as featureHelper from '../featureHelper';
 
 var dataViewLang = lang.toolbox.dataView;
 
@@ -285,6 +286,8 @@ function DataView(model) {
     this._dom = null;
 
     this.model = model;
+
+    featureHelper.setEvent(this);
 }
 
 DataView.defaultOption = {
@@ -301,7 +304,10 @@ DataView.defaultOption = {
     textareaColor: '#fff',
     textareaBorderColor: '#333',
     buttonColor: '#c23531',
-    buttonTextColor: '#fff'
+    buttonTextColor: '#fff',
+
+    // `onclick`, `onmouseover`, `onmouseout`
+    event: {}
 };
 
 DataView.prototype.onclick = function (ecModel, api) {

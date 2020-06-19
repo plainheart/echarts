@@ -21,12 +21,15 @@ import * as echarts from '../../../echarts';
 import * as zrUtil from 'zrender/src/core/util';
 import lang from '../../../lang';
 import * as featureManager from '../featureManager';
+import * as featureHelper from '../featureHelper';
 
 var magicTypeLang = lang.toolbox.magicType;
 var INNER_STACK_KEYWORD = '__ec_magicType_stack__';
 
 function MagicType(model) {
     this.model = model;
+
+    featureHelper.setEvent(this);
 }
 
 MagicType.defaultOption = {
@@ -43,7 +46,10 @@ MagicType.defaultOption = {
     // `line`, `bar`, `stack`, `tiled`
     title: zrUtil.clone(magicTypeLang.title),
     option: {},
-    seriesIndex: {}
+    seriesIndex: {},
+
+    // `onclick`, `onmouseover`, `onmouseout`
+    event: {}
 };
 
 var proto = MagicType.prototype;

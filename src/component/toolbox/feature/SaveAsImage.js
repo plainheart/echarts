@@ -22,11 +22,14 @@
 import env from 'zrender/src/core/env';
 import lang from '../../../lang';
 import * as featureManager from '../featureManager';
+import * as featureHelper from '../featureHelper';
 
 var saveAsImageLang = lang.toolbox.saveAsImage;
 
 function SaveAsImage(model) {
     this.model = model;
+
+    featureHelper.setEvent(this);
 }
 
 SaveAsImage.defaultOption = {
@@ -40,7 +43,9 @@ SaveAsImage.defaultOption = {
     name: '',
     excludeComponents: ['toolbox'],
     pixelRatio: 1,
-    lang: saveAsImageLang.lang.slice()
+    lang: saveAsImageLang.lang.slice(),
+    // `onclick`, `onmouseover`, `onmouseout`
+    event: {}
 };
 
 SaveAsImage.prototype.unusable = !env.canvasSupported;

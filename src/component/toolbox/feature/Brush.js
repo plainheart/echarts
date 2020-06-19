@@ -19,6 +19,7 @@
 
 import * as zrUtil from 'zrender/src/core/util';
 import * as featureManager from '../featureManager';
+import * as featureHelper from '../featureHelper';
 import lang from '../../../lang';
 
 var brushLang = lang.toolbox.brush;
@@ -39,6 +40,8 @@ function Brush(model, ecModel, api) {
      * @type {string}
      */
     this._brushMode;
+
+    featureHelper.setEvent(this);
 }
 
 Brush.defaultOption = {
@@ -55,7 +58,9 @@ Brush.defaultOption = {
         /* eslint-enable */
     },
     // `rect`, `polygon`, `lineX`, `lineY`, `keep`, `clear`
-    title: zrUtil.clone(brushLang.title)
+    title: zrUtil.clone(brushLang.title),
+    // `onclick`, `onmouseover`, `onmouseout`
+    event: {}
 };
 
 var proto = Brush.prototype;

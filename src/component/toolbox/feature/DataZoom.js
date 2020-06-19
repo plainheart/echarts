@@ -25,6 +25,7 @@ import * as history from '../../dataZoom/history';
 import sliderMove from '../../helper/sliderMove';
 import lang from '../../../lang';
 import * as featureManager from '../featureManager';
+import * as featureHelper from '../featureHelper';
 
 // Use dataZoomSelect
 import '../../dataZoomSelect';
@@ -50,6 +51,8 @@ function DataZoom(model, ecModel, api) {
      * @type {boolean}
      */
     this._isZoomActive;
+
+    featureHelper.setEvent(this);
 }
 
 DataZoom.defaultOption = {
@@ -61,7 +64,10 @@ DataZoom.defaultOption = {
         back: 'M22,1.4L9.9,13.5l12.3,12.3 M10.3,13.5H54.9v44.6 H10.3v-26'
     },
     // `zoom`, `back`
-    title: zrUtil.clone(dataZoomLang.title)
+    title: zrUtil.clone(dataZoomLang.title),
+
+    // `onclick`, `onmouseover`, `onmouseout`
+    event: {}
 };
 
 var proto = DataZoom.prototype;

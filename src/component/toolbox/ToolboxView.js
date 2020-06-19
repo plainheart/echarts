@@ -21,6 +21,7 @@ import * as echarts from '../../echarts';
 import * as zrUtil from 'zrender/src/core/util';
 import * as textContain from 'zrender/src/contain/text';
 import * as featureManager from './featureManager';
+import * as featureHelper from './featureHelper';
 import * as graphic from '../../util/graphic';
 import Model from '../../model/Model';
 import DataDiffer from '../../data/DataDiffer';
@@ -69,10 +70,10 @@ export default echarts.extendComponentView({
             }
 
             if (featureName && !oldName) { // Create
-                if (isUserFeatureName(featureName)) {
+                if (featureHelper.isUserFeatureName(featureName)) {
                     feature = {
                         model: featureModel,
-                        onclick: featureModel.option.onclick,
+                        event: featureModel.option.event || {},
                         featureName: featureName
                     };
                 }
@@ -94,6 +95,8 @@ export default echarts.extendComponentView({
                 feature.model = featureModel;
                 feature.ecModel = ecModel;
                 feature.api = api;
+
+                featureHelper.setEvent(feature);
             }
 
             if (!featureName && oldName) {
@@ -125,6 +128,9 @@ export default echarts.extendComponentView({
         function createIconPaths(featureModel, feature, featureName) {
             var iconStyleModel = featureModel.getModel('iconStyle');
             var iconStyleEmphasisModel = featureModel.getModel('emphasis.iconStyle');
+
+            var rotation = +iconStyleModel.get('rotate') * Math.PI / 180 || 0;
+            var hoverRotation = +iconStyleEmphasisModel.get('rotate') * Math.PI / 180 || 0;
 
             // If one feature has mutiple icon. they are orginaized as
             // {
@@ -160,6 +166,7 @@ export default echarts.extendComponentView({
                     }
                 );
                 path.setStyle(iconStyleModel.getItemStyle());
+                path.attr('rotation', rotation);
                 path.hoverStyle = iconStyleEmphasisModel.getItemStyle();
 
                 // Text position calculation
@@ -205,20 +212,27 @@ export default echarts.extendComponentView({
                                 textBackgroundColor: iconStyleEmphasisModel.get('textBackgroundColor'),
                                 textPosition: iconStyleEmphasisModel.get('textPosition') || defaultTextPosition
                             });
+                            path.attr('rotation', hoverRotation);
                         })
                         .on('mouseout', function () {
                             path.setStyle({
                                 textFill: null,
                                 textBackgroundColor: null
                             });
+                            path.attr('rotation', rotation);
                         });
                 }
                 path.trigger(featureModel.get('iconStatus.' + iconName) || 'normal');
 
                 group.add(path);
-                path.on('click', zrUtil.bind(
+
+                // only non-custom feature
+                feature.onclick && path.on('click', zrUtil.bind(
                     feature.onclick, feature, ecModel, api, iconName
                 ));
+
+                // custom feature
+                featureHelper.bindCustomEventListeners(path, feature, iconName);
 
                 iconPaths[iconName] = path;
             });
@@ -285,6 +299,3 @@ export default echarts.extendComponentView({
     }
 });
 
-function isUserFeatureName(featureName) {
-    return featureName.indexOf('my') === 0;
-}

@@ -39,8 +39,7 @@ export default function decalVisual(ecModel: GlobalModel, api: ExtensionAPI) {
             });
         }
         const decal = data.getVisual('decal');
-        const b = [3,5];
-        if (decal && b) {
+        if (decal) {
             const style = data.getVisual('style');
             style.decal = createOrUpdatePatternFromDecal(decal, api);
         }

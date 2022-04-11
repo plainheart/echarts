@@ -12,12 +12,13 @@ jobs:
         env:
           PR_COMMIT_COUNT: ${{ github.event.pull_request.commits }}
         run: |
-          echo 'FETCH_DEPTH=$(${PR_COMMIT_COUNT} + 1)' >> $GITHUB_ENV
+          echo 'FETCH_DEPTH=$($(env.PR_COMMIT_COUNT) + 1)' >> $GITHUB_ENV
           echo "${{ env.FETCH_DEPTH }}"
 
       - uses: actions/checkout@v3
         with:
-          fetch-depth: ${{ env.FETCH_DEPTH }}
+          #fetch-depth: ${{ env.FETCH_DEPTH }}
+          fetch-depth: ${{ github.event.pull_request.commits }}
 
       - name: Use Node.js
         uses: actions/setup-node@v3

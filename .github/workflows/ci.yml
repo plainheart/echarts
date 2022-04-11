@@ -18,6 +18,9 @@ jobs:
         #with:
           #ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Git Diff
+        run: git diff ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:

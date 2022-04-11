@@ -13,7 +13,8 @@ jobs:
           PR_COMMIT_COUNT: ${{ github.event.pull_request.commits }}
         run: |
           echo ${{ env.PR_COMMIT_COUNT }}
-          echo "FETCH_DEPTH=1" >> $GITHUB_ENV
+          echo "$PR_COMMIT_COUNT"
+          echo "FETCH_DEPTH=$(($PR_COMMIT_COUNT + 1))" >> $GITHUB_ENV
 
       - uses: actions/checkout@v3
         with:

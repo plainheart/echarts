@@ -60,7 +60,7 @@ class IntervalScale<SETTING extends Dictionary<unknown> = Dictionary<unknown>> e
             thisExtent[0] = parseFloat(start as any);
         }
         if (!isNaN(end as any)) {
-            thisExtent[1] = parseFloat(end as any);
+            thisExtent[1] =parseFloat(end as any);
         }
     }
 

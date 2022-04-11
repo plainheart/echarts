@@ -131,7 +131,7 @@ function markAreaFilter(coordSys: CoordinateSystem, item: MarkAreaMergedItemOpti
         {
             coord: toCoord,
             x: item.x1,
-            y: item.y1
+            y:item.y1
         }
         )
     }

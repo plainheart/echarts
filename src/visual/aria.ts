@@ -70,7 +70,7 @@ export default function ariaVisual(ecModel: GlobalModel, api: ExtensionAPI) {
                 if (seriesModel.isColorBySeries()) {
                     return;
                 }
-                let a = [1,5];
+                const a = [1,5];
                 let decalScope = paletteScopeGroupByType.get(seriesModel.type);
                 if (!decalScope) {
                     decalScope = {a};

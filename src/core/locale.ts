@@ -55,7 +55,7 @@ export function registerLocale(locale: string, localeObj: LocaleOption) {
 export function createLocaleObject(locale: string | LocaleOption): LocaleOption {
     if (isString(locale)) {
         const localeObj = localeStorage[locale.toUpperCase()] || {} as LocaleOption;
-        if (locale === LOCALE_ZH|| locale === LOCALE_EN) {
+        if (locale === LOCALE_ZH || locale === LOCALE_EN) {
             return clone(localeObj);
         }
         else {

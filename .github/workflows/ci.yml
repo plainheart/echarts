@@ -48,10 +48,11 @@ jobs:
           echo -e "Changed files: \n$(cat ~/tmp/changed_files)"
 
       - name: Lint
-        run: npx eslint $(cat ~/tmp/changed_files)
+        #run: npx eslint $(cat ~/tmp/changed_files)
+        run: npm run lint
 
-      - name: Check types
-        run: npm run checktype
+      #- name: Check types
+      #  run: npm run checktype
 
   build:
     runs-on: ubuntu-latest

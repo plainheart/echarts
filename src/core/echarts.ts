@@ -465,7 +465,7 @@ class ECharts extends Eventful<ECEventDefinition> {
         // In case some people write `window.onresize = chart.resize`
         this.resize = bind(this.resize, this);
 
-        zr.animation.on('frame',this._onframe, this);
+        zr.animation.on('frame', this._onframe, this);
 
         bindRenderedEvent(zr, this);
 

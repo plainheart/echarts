@@ -97,6 +97,7 @@ jobs:
         run: npm run test:dts
 
       - name: Pack npm tarball
+        #if: ${{ github.repository_owner == 'apache' }}
         id: pack-tarball
         run: |
           export PR_PREVIEW_DIR='echarts-pr-preview'
@@ -105,6 +106,7 @@ jobs:
           echo "PR_PREVIEW_DIR=$PR_PREVIEW_DIR" >> $GITHUB_ENV
 
       - name: Save PR number and dist files
+        if: ${{ success() }}
         env:
           PR_NUMBER: ${{ github.event.number }}
           PR_COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
@@ -117,6 +119,7 @@ jobs:
           echo -e "Dist files: \n$(ls -l)"
 
       - uses: actions/upload-artifact@v3
+        if: ${{ success() }}
         with:
           name: pr_preview
           path: ${{ env.PR_PREVIEW_DIR }}

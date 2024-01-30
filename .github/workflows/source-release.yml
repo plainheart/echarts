@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - uses: actions/checkout@v4
+
       - name: Build source release
         run: |
           npm ci

@@ -21,6 +21,8 @@ jobs:
 
       - name: Build source release
         run: |
+          node --version
+          npm --version
           npm ci
           npx jest --version
           npm run release

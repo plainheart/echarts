@@ -37,7 +37,7 @@ jobs:
           node build/source-release/prepareReleaseMaterials.js \
             --rcversion ${{env.RELEASE_VERSION}} \
             --commit ${{github.sha}} \
-            --repo ${{github.repository}} \
+            --repo apache/echarts \
             --out tmp/materials
       - name: Archive materials
         uses: actions/upload-artifact@v3
